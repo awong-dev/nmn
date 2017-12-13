@@ -3,6 +3,7 @@ node_modules
 
 serviceAccountKey.json
 public/generated
+python/venv
 
 *.log
 *.sw[op]
