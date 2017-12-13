@@ -11,12 +11,18 @@ function uploadToFirebase(data) {
     credential: admin.credential.cert(serviceAccount),
   });
   const db = admin.firestore();
+  const batch = db.batch();
   const survey = db.collection('survey');
   console.log("uploading data");
   for (let entry of data) {
-    console.log(`${entry['Entry Id']} = ${entry}`);
-    survey.doc(entry['Entry Id']).set(entry);
+    if (entry) {
+      console.log(`${entry['Entry Id']} = ${JSON.stringify(entry, null, 2)}`);
+      const x = entry['Entry Id'];
+      batch.set(db.collection('survey').doc(entry['Entry Id']), entry);
+    }
   }
+  console.log("committing");
+  batch.commit();
 }
 
 // Parse the data.
@@ -41,6 +47,7 @@ parser.on('finish', () =>{
   asyncLib.map(output.slice(1),
             (item, cb) => {
               where.is(item[ipIndex], (err, result) =>{
+                console.log(`locating ip ${item[ipIndex]}`);
                 const entry = {}
                 for (let x = 0; x < item.length; x++) {
                   // Clear out the IP.
@@ -50,13 +57,13 @@ parser.on('finish', () =>{
                     entry[header[x]] = item[x];
                   }
                 }
-                if (!err) {
-                  entry['City'] = result.get('city');
-                  entry['State'] = result.get('state');
-                  entry['PostalCode'] = result.get('postalCode');
-                  entry['Country'] = result.get('country');
-                  entry['Lat'] = result.get('lat');
-                  entry['Long'] = result.get('lng');
+                if (err === null) {
+                  entry['City'] = result.get('city') || null
+                  entry['State'] = result.get('state') || null;
+                  entry['PostalCode'] = result.get('postalCode') || null;
+                  entry['Country'] = result.get('country') || null;
+                  entry['Lat'] = result.get('lat') || null;
+                  entry['Long'] = result.get('lng') || null;
                 }
                 cb(null, entry);
               });
