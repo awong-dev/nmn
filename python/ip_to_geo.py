@@ -43,13 +43,13 @@ for (key, value) in data.items():
       value['Country'] = response.country.name
       value['PostalCode'] = response.postal.code
       value['Lat'] = response.location.latitude
-      value['Long'] = response.location.longitude
+      value['Lon'] = response.location.longitude
   except:
       value['City'] = None
       value['Country'] = None
       value['PostalCode'] = None
       value['Lat'] = None
-      value['Long'] = None
+      value['Lon'] = None
 
 
 if options.outfile:
