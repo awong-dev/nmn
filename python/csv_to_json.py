@@ -17,6 +17,12 @@ parser.add_option("-o", "--outfile",
 
 (options, args) = parser.parse_args()
 
+def field_to_int(value):
+  if value:
+    return int(value)
+  else:
+    return None
+
 data = {}
 with open(options.infile) as csv_file:
   # Handle leading BOM in UTF-8. Grumble...grumble...stupid unicode.
@@ -35,6 +41,11 @@ with open(options.infile) as csv_file:
       entry = {}
       for i in xrange(len(row)):
         entry[header_row[i]] = row[i]
+      # Convert numeric values to the right type.
+      entry['Entered-Negative'] = field_to_int(entry['Entered-Negative'])
+      entry['Entered-Suicidal'] = field_to_int(entry['Entered-Suicidal'])
+      entry['Now-Negative'] = field_to_int(entry['Now-Negative'])
+      entry['Now-Suicidal'] = field_to_int(entry['Now-Suicidal'])
       data[row[entry_id_index]] = entry
     else:
       header_row = row
