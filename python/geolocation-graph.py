@@ -16,7 +16,7 @@ survey_data = None
 with open(options.infile) as infile:
   survey_data = json.load(infile)
 
-# Based on example at https://plot.ly/python/bubble-maps/
+# Create the plot arrays.
 ids = []
 lons = []
 lats = []

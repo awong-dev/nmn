@@ -19,6 +19,14 @@ parser.add_option("-o", "--outfile",
 
 data = {}
 with open(options.infile) as csv_file:
+  # Handle leading BOM in UTF-8. Grumble...grumble...stupid unicode.
+  start = csv_file.tell()
+  leading_bytes = csv_file.read(3)
+  if leading_bytes[0] == '\xEF' and leading_bytes[1] == '\xBB' and leading_bytes[2] == '\xBF':
+    print "Found UTF-8 BOM at start of file! Oh joy. Skipping it"
+  else:
+    csv_file.seek(start)
+
   header_row = None
   entry_id_index = None
   survey_csv = csv.reader(csv_file)
