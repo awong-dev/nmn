@@ -106,6 +106,7 @@ function output_results(err, header, rows) {
   }
   const results = {
     header: Object.keys(HeadersForOutput),
+    data: {},
   }
   const entryIdIndex = header.indexOf('Entry Id');
   for (let r of rows) {
@@ -114,7 +115,7 @@ function output_results(err, header, rows) {
       const header_value = header[i];
       if (HeadersForOutput.hasOwnProperty(header_value)) {
         new_row[results.header.indexOf(header_value)] =
-          r[HeadersForOutput[header_value]];
+          r.data[HeadersForOutput[header_value]];
       }
     }
     results[r[entryIdIndex]] = new_row;
