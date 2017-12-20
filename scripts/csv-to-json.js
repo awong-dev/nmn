@@ -88,18 +88,13 @@ function output_results(err, header, rows) {
     "Entry Date": null,
     "Source Url": null,
     "User IP": null,
-    'City': null,
     'State': null,
-    'PostalCode': null,
-    'Country': null,
-    'Lat': null,
-    'Long': null
+    'Country': null
   };
 
   // Initialize Headers.
   for (let i = 0; i < header.length; i++) {
     const header_value = header[i];
-    console.log(header_value)
     if (HeadersForOutput.hasOwnProperty(header_value)) {
       HeadersForOutput[header_value] = i;
     }
@@ -118,7 +113,7 @@ function output_results(err, header, rows) {
           r.data[HeadersForOutput[header_value]];
       }
     }
-    results[r[entryIdIndex]] = new_row;
+    results.data[r[entryIdIndex]] = new_row;
   }
   console.log(JSON.stringify(results));
 }
@@ -126,12 +121,8 @@ function output_results(err, header, rows) {
 function fill_in_geo(ip, item, cb, retries) {
   where.is(ip, (err, result) =>{
     if (err === null) {
-      item.push(result.get('city') || null,
-                result.get('state') || null,
-                result.get('postalCode') || null,
-                result.get('country') || null,
-                result.get('lat') || null,
-                result.get('lng') || null);
+      item.push(result.get('state') || null,
+                result.get('country') || null);
     } else {
       if (retries > 0) {
         // Hacky back-off with jitter on failure.
@@ -155,7 +146,7 @@ parser.on('error', (err) => {
 // When we are done, test that the parsed output matched what expected
 parser.on('finish', () =>{
   const header = output[0];
-  header.push('City', 'State', 'PostalCode', 'Country', 'Lat', 'Long');
+  header.push('City', 'State', 'PostalCode', 'Country');
 
   const data_rows = output.slice(1);
   asyncLib.map(data_rows,
