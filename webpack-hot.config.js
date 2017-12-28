@@ -1,8 +1,8 @@
 const config = require('./webpack.config.js');
 const webpack = require('webpack');
 
-config.entry.lights.unshift('webpack/hot/only-dev-server');
-config.entry.lights.unshift('react-hot-loader/patch');
+config.entry.nmn.unshift('webpack/hot/only-dev-server');
+config.entry.nmn.unshift('react-hot-loader/patch');
 
 config.plugins.unshift(new webpack.HotModuleReplacementPlugin());
 

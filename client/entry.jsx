@@ -6,13 +6,13 @@ import firebase from 'firebase'
 require("../sass/style.scss");
 
 function initFirebase() {
-  const config = {
-    apiKey: "AIzaSyAA2GNBLSctt9fUbzulX9OIW2aMPV4eIO4",
-    authDomain: "iotzombie-153122.firebaseapp.com",
-    databaseURL: "https://iotzombie-153122.firebaseio.com",
-    projectId: "iotzombie-153122",
-    storageBucket: "iotzombie-153122.appspot.com",
-    messagingSenderId: "51799231223"
+  var config = {
+    apiKey: "AIzaSyC_txshXQF3h4Q3e1nZYqQJna1iFNzWUaU",
+    authDomain: "nmn-test.firebaseapp.com",
+    databaseURL: "https://nmn-test.firebaseio.com",
+    projectId: "nmn-test",
+    storageBucket: "nmn-test.appspot.com",
+    messagingSenderId: "223988406369"
   };
   firebase.initializeApp(config);
 }
@@ -20,11 +20,11 @@ function initFirebase() {
 function initReact() {
   if (process.env.NODE_ENV === 'development') {
     const { AppContainer } = require('react-hot-loader');
-    const devicesDbRef = firebase.database().ref('/devicesdev');
+    const surveyDataRef = firebase.storage().ref('/data/survey-data-2017-12-13.json');
     const render = Component => {
       ReactDOM.render((
         <AppContainer>
-          <Component devicesDbRef={devicesDbRef}/>
+          <Component surveyDataRef={surveyDataRef}/>
         </AppContainer>
       ), document.getElementById('root'));
     }
