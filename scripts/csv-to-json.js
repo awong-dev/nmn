@@ -51,7 +51,7 @@ function clean_fields(item, header) {
     } else if (BooleanFields.hasOwnProperty(header_value)) {
       item[x] = item[x] !== '';
     } else if (DateTimeFields.hasOwnProperty(header_value)) {
-      item[x] = new Date(`${item[x]} PST`);  // NMN database runs in PST.
+      item[x] = (new Date(`${item[x]} PST`)).getTime();  // NMN database runs in PST.
     }
 
     // Only keep the pathname. Drop query string for privacy. Drop host name for space.
