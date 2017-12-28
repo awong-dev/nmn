@@ -121,7 +121,7 @@ function output_results(err, header, rows) {
 function fill_in_geo(ip, item, cb, retries) {
   where.is(ip, (err, result) =>{
     if (err === null) {
-      item.push(result.get('state') || null,
+      item.push(result.get('region') || null,
                 result.get('country') || null);
     } else {
       if (retries > 0) {
@@ -146,7 +146,7 @@ parser.on('error', (err) => {
 // When we are done, test that the parsed output matched what expected
 parser.on('finish', () =>{
   const header = output[0];
-  header.push('City', 'State', 'PostalCode', 'Country');
+  header.push('State', 'Country');
 
   const data_rows = output.slice(1);
   asyncLib.map(data_rows,
