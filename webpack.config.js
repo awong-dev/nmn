@@ -63,7 +63,7 @@ const config = {
 };
 
 if (isDevelopment) {
-  config.devtool = '#eval-source-map';
+  config.devtool = '#cheap-module-source-map';
 } else {
   config.devtool = '#source-map';
   config.plugins.push(new webpack.optimize.UglifyJsPlugin({sourceMap: true}));

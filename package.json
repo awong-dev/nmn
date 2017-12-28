@@ -17,7 +17,7 @@
     "lint:js": "eslint --quiet --ext .js --ext .jsx client device",
     "upload-csv": "node scripts/upload-csv.js",
     "test": "mocha --compilers js:babel-register --recursive test/**/*.spec.js -t 30000",
-    "watch": "NODE_ENV='development' nodemon index.js & BABEL_ENV=hot webpack-dev-server --config webpack-hot.config.js",
+    "watch": "NODE_ENV='development' BABEL_ENV=hot webpack-dev-server --config webpack-hot.config.js",
     "webpack": "NODE_ENV='production' webpack -p --config webpack.config.js"
   },
   "author": "Albert J. Wong",

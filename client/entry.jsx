@@ -20,11 +20,10 @@ function initFirebase() {
 function initReact() {
   if (process.env.NODE_ENV === 'development') {
     const { AppContainer } = require('react-hot-loader');
-    const surveyDataRef = firebase.storage().ref('/data/survey-data-2017-12-13.json');
     const render = Component => {
       ReactDOM.render((
         <AppContainer>
-          <Component surveyDataRef={surveyDataRef}/>
+          <Component />
         </AppContainer>
       ), document.getElementById('root'));
     }
@@ -33,9 +32,10 @@ function initReact() {
 
     // Hot Module Replacement API
     if (module.hot) {
-      module.hot.accept('./components/App', () => { render(App) });
+      module.hot.accept('./components/App', () => { render(App); });
     }
   } else {
+console.log("Bad");
     const devicesDbRef = firebase.database().ref('/devices');
     ReactDOM.render((
       <App devicesDbRef={devicesDbRef}/>
@@ -45,16 +45,6 @@ function initReact() {
 
 function init() {
   initFirebase();
-
-  // Ensure login.
-  firebase.auth().onAuthStateChanged(function(user) {
-    // No user is signed in.
-    if (!user) {
-	 const provider = new firebase.auth.GoogleAuthProvider();
-	 firebase.auth().signInWithRedirect(provider);
-    }
-  });
-
   initReact();
 }
 
