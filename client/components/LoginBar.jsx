@@ -53,11 +53,11 @@ class LoginBar extends React.Component {
       <header className="login-bar mdc-toolbar mdc-toolbar--fixed">
         <div className="mdc-toolbar__row">
           <section className="mdc-toolbar__section mdc-toolbar__section--align-start">
-            <span className="mdc-toolbar__title">{status}</span>
+            <span className="mdc-toolbar__title">NMN data fun</span>
           </section>
           <section className="mdc-toolbar__section mdc-toolbar__section--align-end">
             <button className="login-button mdc-toolbar__icon"
-                   onClick={this.handleLoginButton}>{this.state.user ? 'Logout' : 'Login'}</button>
+                   onClick={this.handleLoginButton}>{this.state.user ? `Logout [${status}]` : 'Login'}</button>
           </section>
         </div>
       </header>

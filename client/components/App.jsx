@@ -2,6 +2,7 @@ import React from 'react'
 import firebase from 'firebase'
 
 import LoginBar from './LoginBar'
+import DeltaGraph from './DeltaGraph'
 
 class App extends React.Component {
   constructor(props) {
@@ -22,15 +23,14 @@ class App extends React.Component {
 
 
   render() {
+    const graphs = [];
+    if (this.state.survey_data) {
+	 graphs.push(<DeltaGraph surveyData={this.state.survey_data} key="delta-graph" />);
+    }
     return (
       <div className="mdc-layout-grid mdc-toolbar-fixed-adjust">
       <LoginBar />
-        <div className="mdc-layout-grid__inner">
-          <div className="mdc-layout-grid__cell">
-            Json data:
-		  <br />{JSON.stringify(this.state.survey_data, null, 2)}
-          </div>
-        </div>
+      {graphs}
       </div>
     );
   }

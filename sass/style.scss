@@ -2,6 +2,7 @@ $mdc-theme-primary: #fdc744;
 $mdc-theme-secondary: #303f9f;
 
 @import "@material/button/mdc-button";
+@import "@material/card/mdc-card";
 @import "@material/layout-grid/mdc-layout-grid";
 @import "@material/list/mdc-list";
 @import "@material/theme/mdc-theme";
@@ -16,31 +17,7 @@ $mdc-theme-secondary: #303f9f;
   @include mdc-button-filled-accessible($mdc-theme-primary)
 }
 
-.device-list-header {
-  @include mdc-typography('title')
-  text-align: center;
-  width: 100%;
-  display: inline-block;
-}
-
-.device-entry {
-  width: 100%;
-  margin: 0.1ex;
-}
-
-.device-entry-icon {
-  display: inline;
-  vertical-align: middle;
-}
-
-.momentary-button {
-  @include mdc-button-filled-accessible($mdc-theme-secondary-dark)
-}
-
-.device-on {
-  @include mdc-button-filled-accessible($mdc-theme-secondary)
-}
-
-.device-off {
-  @include mdc-button-filled-accessible($mdc-theme-primary-dark)
+.chart {
+  border-style: double;
+  padding: 1ex;
 }
