@@ -32,13 +32,14 @@ function initReact() {
 
     // Hot Module Replacement API
     if (module.hot) {
-      module.hot.accept('./components/App', () => { render(App); });
+      module.hot.accept('./components/App', () => {
+        const NextApp = require('./components/App').default;
+        render(NextApp);
+      });
     }
   } else {
-console.log("Bad");
-    const devicesDbRef = firebase.database().ref('/devices');
     ReactDOM.render((
-      <App devicesDbRef={devicesDbRef}/>
+      <App />
     ), document.getElementById('root'));
   }
 }
