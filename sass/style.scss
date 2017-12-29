@@ -17,7 +17,15 @@ $mdc-theme-secondary: #303f9f;
   @include mdc-button-filled-accessible($mdc-theme-primary)
 }
 
+.card {
+  margin: 1ex;
+}
+
 .chart {
   border-style: double;
   padding: 1ex;
+  background-color: LightGrey;
+}
+
+.graph-svg-component {
 }

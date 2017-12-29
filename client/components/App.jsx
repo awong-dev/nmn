@@ -3,6 +3,7 @@ import firebase from 'firebase'
 
 import LoginBar from './LoginBar'
 import DeltaGraph from './DeltaGraph'
+import FrequencyGraph from './FrequencyGraph'
 
 class App extends React.Component {
   constructor(props) {
@@ -25,7 +26,10 @@ class App extends React.Component {
   render() {
     const graphs = [];
     if (this.state.survey_data) {
-	 graphs.push(<DeltaGraph surveyData={this.state.survey_data} key="delta-graph" />);
+      graphs.push (
+        <DeltaGraph surveyData={this.state.survey_data} key="delta-graph" />,
+        <FrequencyGraph surveyData={this.state.survey_data} key="frequency-graph" />,
+      );
     }
     return (
       <div className="mdc-layout-grid mdc-toolbar-fixed-adjust">
