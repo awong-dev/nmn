@@ -1,7 +1,6 @@
 import React from 'react'
 import * as d3 from "d3";
-import firebase from 'firebase'
-import Measure from 'react-measure'
+import ChartCard from './ChartCard'
 
 class DeltaGraph extends React.Component {
   constructor(props) {
@@ -119,24 +118,13 @@ class DeltaGraph extends React.Component {
 
   render() {
     return (
-      <div className="card mdc-card mdc-theme--primary-bg mdc-card--theme-dark">
-	   <section className="mdc-card__primary">
-		<h1 className="mdc-card__title mdc-card__title--large">Delta Graph</h1>
-          <h2 className="mdc-card__subtitle">Bar graph of deltas for Negative feelings from enter to "now"</h2>
-	   </section>
-        <section className="mdc-card__supporting-text">
-          <div className="chart">
-            <Measure bounds onResize={(contentRect) => this.setState({width: contentRect.bounds.width})}>
-              {({ measureRef }) =>
-                <div ref={measureRef}>
-                  <svg ref={(r) => this.chartRef = r}>
-                  </svg>
-                </div>
-              }
-            </Measure>
-          </div>
-        </section>
-      </div>
+      <ChartCard
+        title="Delta Graph"
+        surveyData='Bar graph of deltas for Negative feelings from enter to "now"'
+        onResize={(contentRect) => this.setState({width: contentRect.bounds.width})}>
+        <svg ref={(r) => this.chartRef = r}>
+        </svg>
+      </ChartCard>
     );
   }
 }

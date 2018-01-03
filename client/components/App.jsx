@@ -2,6 +2,7 @@ import React from 'react'
 import firebase from 'firebase'
 
 import LoginBar from './LoginBar'
+import CorrelationGraph from './CorrelationGraph'
 import DeltaGraph from './DeltaGraph'
 import FrequencyGraph from './FrequencyGraph'
 import SurveyData from '../data/SurveyData'
@@ -30,6 +31,13 @@ class App extends React.Component {
       graphs.push (
         <DeltaGraph surveyData={this.state.survey_data} key="delta-graph" />,
         <FrequencyGraph surveyData={this.state.survey_data} key="frequency-graph" />,
+        <CorrelationGraph
+          category='Negative'
+          is_midaged_male={false}
+          is_mental_health_provider={false}
+          is_other_healthcare_provider={false}
+          surveyData={this.state.survey_data}
+          key="correlation-graph" />,
       );
     }
     return (

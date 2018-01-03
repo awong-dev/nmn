@@ -1,7 +1,6 @@
 import React from 'react'
 import * as d3 from "d3";
-import firebase from 'firebase'
-import Measure from 'react-measure'
+import ChartCard from './ChartCard'
 
 const kCirclePadding = 1; // This is a hack to do position calculations.
 class FrequencyGraph extends React.Component {
@@ -157,24 +156,13 @@ class FrequencyGraph extends React.Component {
 
   render() {
     return (
-      <div className="card mdc-card mdc-theme--primary-bg mdc-card--theme-dark">
-	   <section className="mdc-card__primary">
-		<h1 className="mdc-card__title mdc-card__title--large">Delta Frequncy Graph</h1>
-          <h2 className="mdc-card__subtitle">Visual Representation of frequency for various deltas</h2>
-	   </section>
-        <section className="mdc-card__supporting-text">
-          <div className="chart">
-            <Measure bounds onResize={(contentRect) => this.setState({width: contentRect.bounds.width})}>
-              {({ measureRef }) =>
-                <div ref={measureRef}>
-                  <svg ref={(r) => this.chartRef = r}>
-                  </svg>
-                </div>
-              }
-            </Measure>
-          </div>
-        </section>
-      </div>
+      <ChartCard
+        title="Delta Frequncy Graph"
+        surveyData="Visual Representation of frequency for various deltas"
+        onResize={(contentRect) => this.setState({width: contentRect.bounds.width})}>
+        <svg ref={(r) => this.chartRef = r}>
+        </svg>
+      </ChartCard>
     );
   }
 }
