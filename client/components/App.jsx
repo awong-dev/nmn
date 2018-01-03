@@ -4,6 +4,7 @@ import firebase from 'firebase'
 import LoginBar from './LoginBar'
 import DeltaGraph from './DeltaGraph'
 import FrequencyGraph from './FrequencyGraph'
+import SurveyData from '../data/SurveyData'
 
 class App extends React.Component {
   constructor(props) {
@@ -18,7 +19,7 @@ class App extends React.Component {
     }).then(response => {
       return response.json();
     }).then(survey_data => {
-      this.setState({ survey_data });
+      this.setState({ survey_data: new SurveyData(survey_data) });
     });
   }
 

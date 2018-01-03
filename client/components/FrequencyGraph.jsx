@@ -8,7 +8,7 @@ class FrequencyGraph extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: this.extractFrequencies(this.props.surveyData, 'Negative'),
+      data: this.extractFrequencies(this.props.surveyData.calculateDeltas('Negative')),
       width: 1024,
       height: 400
     };
@@ -16,22 +16,7 @@ class FrequencyGraph extends React.Component {
     this.drawChart = this.drawChart.bind(this);
   }
 
-  extractFrequencies(survey_data, category) {
-    const deltas = [];
-    const enter_index = survey_data.header.indexOf(`Entered-${category}`);
-    const now_index = survey_data.header.indexOf(`Now-${category}`);
-    Object.entries(survey_data.data).forEach(
-      ([entry_id, row]) => {
-        const entered = row[enter_index];
-        const now = row[now_index];
-        if (entered && now) {
-          deltas.push({
-            val: now - entered,
-            label: entry_id
-          })
-        }
-      });
-
+  extractFrequencies(deltas) {
     let distance = 0;
     const frequencies = [];
     for (let i in deltas) {

@@ -6,38 +6,14 @@ import Measure from 'react-measure'
 class DeltaGraph extends React.Component {
   constructor(props) {
     super(props);
+
     this.state = {
-      data: this.extractDeltas(this.props.surveyData, 'Negative'),
+      data: this.props.surveyData.calculateDeltas('Negative'),
       width: 1024,
       height: 400
     };
 
     this.drawChart = this.drawChart.bind(this);
-  }
-
-  extractDeltas(survey_data, category) {
-    const deltas = [];
-    const enter_index = survey_data.header.indexOf(`Entered-${category}`);
-    const now_index = survey_data.header.indexOf(`Now-${category}`);
-    Object.entries(survey_data.data).forEach(
-      ([entry_id, row]) => {
-        const entered = row[enter_index];
-        const now = row[now_index];
-        if (entered && now) {
-          deltas.push({
-            val: now - entered,
-            label: entry_id
-          })
-        }
-      });
-    deltas.sort((a, b) => {
-      if (a.val < b.val)
-        return -1;
-      if (a.val > b.val) 
-        return 1;
-      return 0;
-    });
-    return deltas;
   }
 
   componentDidMount() {
