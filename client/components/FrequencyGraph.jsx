@@ -62,10 +62,6 @@ class FrequencyGraph extends React.Component {
     this.processing();
   }
 
-  componentWillUnmount() {
-    clearInterval(this._interval);
-  }
-
   componentDidUpdate() {
     this.drawChart();
   }

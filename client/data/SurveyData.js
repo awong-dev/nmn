@@ -81,26 +81,32 @@ class SurveyData {
       return this.correlations[memoization_key];
     }
 
-    const correlations = this.correlations[memoization_key] = { data:[] }
+    const correlations = this.correlations[memoization_key] = { table:[] }
     // Initialize array.
-    for (let entered = 1; entered <= 5; entered++) {
-      correlations.data[entered] = [];
-      for (let now = 1; now <= 5; now++) {
-        correlations.data[entered][now] = 0;
+    for (let entered = 0; entered < 5; entered++) {
+      correlations.table[entered] = [];
+      for (let now = 0; now < 5; now++) {
+        correlations.table[entered][now] = 0;
       }
     }
 
     // Go through data and tabulate.
-    const enter_index = getEnteredIndex(category);
-    const now_index = getNowIndex(category);
+    const enter_index = this.getEnteredIndex(category);
+    const now_index = this.getNowIndex(category);
     let total_entries = 0;
+    let max_value = 0;
     Object.entries(this.data).forEach(
       ([_, row]) => {
-        entry_metadata = getEntryMetadata(row);
-        if (entry_metadata.is_midaged_male == is_midaged_male &&
-           entry_metadata.is_mental_health_provider == is_mental_health_provider &&
-           entry_metadata.is_other_healthcare_provider == is_other_healthcare_provider) {
-             correlations.data[row[enter_index]][row[now_index]]++;
+        const entry_metadata = this.getEntryMetadata(row);
+        const entered = row[enter_index];
+        const now = row[now_index];
+        if (entered && now &&
+            entry_metadata.is_midaged_male == is_midaged_male &&
+            entry_metadata.is_mental_health_provider == is_mental_health_provider &&
+            entry_metadata.is_other_healthcare_provider == is_other_healthcare_provider) {
+             const cur_val = ++correlations.table[entered-1][now-1];
+             if (cur_val > max_value)
+               max_value = cur_val;
              total_entries++;
         }
       }
@@ -110,6 +116,7 @@ class SurveyData {
     correlations.is_mental_health_provider = is_mental_health_provider;
     correlations.is_midaged_male = is_midaged_male;
     correlations.total_entries = total_entries;
+    correlations.max_value = max_value;
     return correlations;
   }
 }
