@@ -2,9 +2,13 @@ import React from 'react'
 import firebase from 'firebase'
 
 import LoginBar from './LoginBar'
+
 import CorrelationGraph from './CorrelationGraph'
 import DeltaGraph from './DeltaGraph'
+import EnterNowModes from './EnterNowModes'
 import FrequencyGraph from './FrequencyGraph'
+import VerticalDeltas from './VerticalDeltas'
+
 import SurveyData from '../data/SurveyData'
 
 class App extends React.Component {
@@ -29,6 +33,13 @@ class App extends React.Component {
     const graphs = [];
     if (this.state.survey_data) {
       graphs.push(
+        <VerticalDeltas surveyData={this.state.survey_data} category='Negative' key="vertical-negative" />,
+//        <VerticalDeltas surveyData={this.state.survey_data} category='Suicidal' key="vertical-suicidal" />,
+//        <EnterNowModes surveyData={this.state.survey_data} category='Negative' key="enter-exit-negative" />,
+//        <EnterNowModes surveyData={this.state.survey_data} category='Suicidal' key="enter-exit-suicidal" />,
+        // Data holes.
+        // IP collision, enter/exit.
+        // small changes (0-1 delta), medium changes (2-3), large changes (4).
         <DeltaGraph surveyData={this.state.survey_data} key="delta-graph" />,
         <FrequencyGraph surveyData={this.state.survey_data} key="frequency-graph" />,
       );

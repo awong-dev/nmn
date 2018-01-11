@@ -32,6 +32,73 @@ class SurveyData {
   getEnteredIndex(category) { return this.headers[`Entered-${category}`]; }
   getNowIndex(category) { return this.headers[`Now-${category}`]; }
 
+  getEnteredNowValues(category) {
+    const enter_index = this.getEnteredIndex(category);
+    const now_index = this.getNowIndex(category);
+    const results = [];
+    Object.entries(this.data).forEach(
+      ([entry_id, row]) => {
+        const entered = row[enter_index];
+        const now = row[now_index];
+        if ((entered !== null && now != null) && entered !== now) {
+          const is_better = now < entered;
+          results.push({
+		  is_better,
+		  low: now < entered ? now : entered,
+		  high: now < entered ? entered : now,
+		  name: entry_id,
+		  color: is_better ? 'green' : 'red'
+          });
+        }
+      }
+    );
+
+    results.sort((a, b) => {
+      if (a.is_better && !b.is_better) {
+        return -1;
+	 } else if (!a.is_better && b.is_better) {
+        return 1;
+      } else {
+        if (a.high < b.high) {
+          return 1;
+        } else if (a.high > b.high) {
+          return -1;
+        } else {
+          if (a.low < b.low) {
+            return -1;
+          } else if (a.low > b.low) {
+            return 1;
+          }
+        }
+      }
+      return 0;
+    });
+
+    return results;
+  }
+
+  getEnteredValues(category) {
+    const enter_index = this.getEnteredIndex(category);
+    const results = [];
+    Object.entries(this.data).forEach(
+      ([entry_id, row]) => {
+        results.push(row[enter_index] || 'none');
+      }
+    );
+    return results;
+  }
+
+  getNowValues(category) {
+    const now_index = this.getNowIndex(category);
+    const results = [];
+    Object.entries(this.data).forEach(
+      ([entry_id, row]) => {
+        results.push(row[now_index] || 'none');
+      }
+    );
+    return results;
+  }
+
   // Returns delta between "Entered" and "Now" for the given category.
   // Category can be one of "Negative" or "Suicidal".
   calculateDeltas(category) {
