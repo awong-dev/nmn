@@ -35,25 +35,30 @@ class SurveyData {
   getEnteredNowValues(category) {
     const enter_index = this.getEnteredIndex(category);
     const now_index = this.getNowIndex(category);
-    const results = [];
+    const got_better = [];
+    const got_worse = [];
     Object.entries(this.data).forEach(
       ([entry_id, row]) => {
         const entered = row[enter_index];
         const now = row[now_index];
         if ((entered !== null && now != null) && entered !== now) {
           const is_better = now < entered;
-          results.push({
+          const datum = {
 		  is_better,
 		  low: now < entered ? now : entered,
 		  high: now < entered ? entered : now,
 		  name: entry_id,
-		  color: is_better ? 'green' : 'red'
-          });
+          };
+          if (is_better) {
+            got_better.push(datum);
+          } else {
+            got_worse.push(datum);
+          }
         }
       }
     );
-
-    results.sort((a, b) => {
+    
+    const sort_func = (a, b) => {
       if (a.is_better && !b.is_better) {
         return -1;
 	 } else if (!a.is_better && b.is_better) {
@@ -72,9 +77,12 @@ class SurveyData {
         }
       }
       return 0;
-    });
+    };
 
-    return results;
+    got_better.sort(sort_func);
+    got_worse.sort(sort_func);
+
+    return { got_better, got_worse };
   }
 
   getEnteredValues(category) {

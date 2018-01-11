@@ -7,11 +7,14 @@ HighchartsMore(Highcharts);
 class VerticalDeltas extends React.Component {
   constructor(props) {
     super(props);
-    const surveyData = this.props.surveyData;
+    const data = this.props.surveyData.getEnteredNowValues(props.category);
     this.state = {
-      data: this.props.surveyData.getEnteredNowValues(props.category),
-      id: `vertical-deltas-${props.category}-container`,
-      title: `Enter to Now sorted : ${props.category}`, 
+      data: props.gotBetter ? data.got_better : data.got_worse,
+      color: props.gotBetter ? 'green' : 'red',
+      series_name: 'Enter -> Now',
+      revsere_y: props.gotBetter,
+      id: `vertical-deltas-${props.category}-${props.gotBetter}-container`,
+      title: `${series_name} : ${props.category}`,
     };
   }
 
@@ -32,7 +35,8 @@ class VerticalDeltas extends React.Component {
 	   title: { text: 'Entry' },
 	 },
 	 yAxis: {
-	   title: { text: 'Ratings' }
+	   title: { text: 'Ratings' },
+        reversed: this.state.revsere_y,
 	 },
 	 plotOptions: {
 	   columnrange: {
@@ -46,8 +50,9 @@ class VerticalDeltas extends React.Component {
 	 },
 	 series: [{
         turboThreshold: 0,
-	   name: 'enter-exit',
+	   name: this.state.series_name,
 	   data: this.state.data,
+        color: this.state.color,
 	 }]
     });
   }

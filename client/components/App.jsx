@@ -33,10 +33,12 @@ class App extends React.Component {
     const graphs = [];
     if (this.state.survey_data) {
       graphs.push(
-        <VerticalDeltas surveyData={this.state.survey_data} category='Negative' key="vertical-negative" />,
-//        <VerticalDeltas surveyData={this.state.survey_data} category='Suicidal' key="vertical-suicidal" />,
-//        <EnterNowModes surveyData={this.state.survey_data} category='Negative' key="enter-exit-negative" />,
-//        <EnterNowModes surveyData={this.state.survey_data} category='Suicidal' key="enter-exit-suicidal" />,
+        <VerticalDeltas gotBetter={true} surveyData={this.state.survey_data} category='Negative' key="vertical-negative-better" />,
+        <VerticalDeltas gotBetter={true} surveyData={this.state.survey_data} category='Suicidal' key="vertical-suicidal-better" />,
+        <VerticalDeltas gotBetter={false} surveyData={this.state.survey_data} category='Negative' key="vertical-negative-worse" />,
+        <VerticalDeltas gotBetter={false} surveyData={this.state.survey_data} category='Suicidal' key="vertical-suicidal-worse" />,
+        <EnterNowModes surveyData={this.state.survey_data} category='Negative' key="enter-exit-negative" />,
+        <EnterNowModes surveyData={this.state.survey_data} category='Suicidal' key="enter-exit-suicidal" />,
         // Data holes.
         // IP collision, enter/exit.
         // small changes (0-1 delta), medium changes (2-3), large changes (4).
