@@ -34,9 +34,9 @@ class App extends React.Component {
     if (this.state.survey_data) {
       graphs.push(
         <VerticalDeltas gotBetter={true} surveyData={this.state.survey_data} category='Negative' key="vertical-negative-better" />,
-        <VerticalDeltas gotBetter={true} surveyData={this.state.survey_data} category='Suicidal' key="vertical-suicidal-better" />,
-        <VerticalDeltas gotBetter={false} surveyData={this.state.survey_data} category='Negative' key="vertical-negative-worse" />,
-        <VerticalDeltas gotBetter={false} surveyData={this.state.survey_data} category='Suicidal' key="vertical-suicidal-worse" />,
+                  <VerticalDeltas gotBetter={true} surveyData={this.state.survey_data} category='Suicidal' key="vertical-suicidal-better" />,
+                  <VerticalDeltas gotBetter={false} surveyData={this.state.survey_data} category='Negative' key="vertical-negative-worse" />,
+                  <VerticalDeltas gotBetter={false} surveyData={this.state.survey_data} category='Suicidal' key="vertical-suicidal-worse" />,
         <EnterNowModes surveyData={this.state.survey_data} category='Negative' key="enter-exit-negative" />,
         <EnterNowModes surveyData={this.state.survey_data} category='Suicidal' key="enter-exit-suicidal" />,
         // Data holes.

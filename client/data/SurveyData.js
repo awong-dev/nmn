@@ -14,6 +14,9 @@ class SurveyData {
     // Memoization fields.
     this.deltas = {};
     this.correlations = {};
+    this.enteredNowValues = {};
+    this.enteredValues = {};
+    this.nowValues = {};
   }
 
   get(entry_id, column_name) {
@@ -33,10 +36,15 @@ class SurveyData {
   getNowIndex(category) { return this.headers[`Now-${category}`]; }
 
   getEnteredNowValues(category) {
+    if (this.enteredNowValues[category]) {
+      return this.enteredNowValues[category];
+    }
+    const results = this.enteredNowValues[category] = {
+      got_better: [],
+      got_worse: [],
+    };
     const enter_index = this.getEnteredIndex(category);
     const now_index = this.getNowIndex(category);
-    const got_better = [];
-    const got_worse = [];
     Object.entries(this.data).forEach(
       ([entry_id, row]) => {
         const entered = row[enter_index];
@@ -47,9 +55,9 @@ class SurveyData {
           const high = is_better ? entered : now;
           const datum = [entry_id.toString(), low, high];
           if (is_better) {
-            got_better.push(datum);
+            results.got_better.push(datum);
           } else {
-            got_worse.push(datum);
+            results.got_worse.push(datum);
           }
         }
       }
@@ -70,15 +78,18 @@ class SurveyData {
       return 0;
     };
 
-    got_better.sort(sort_func);
-    got_worse.sort(sort_func);
+    results.got_better.sort(sort_func);
+    results.got_worse.sort(sort_func);
 
-    return { got_better, got_worse };
+    return results;
   }
 
   getEnteredValues(category) {
+    if (this.enteredValues[category]) {
+      return this.enteredValues[category];
+    }
+    const results = this.enteredValues[category] = [];
     const enter_index = this.getEnteredIndex(category);
-    const results = [];
     Object.entries(this.data).forEach(
       ([entry_id, row]) => {
         results.push(row[enter_index] || 'none');
@@ -88,8 +99,11 @@ class SurveyData {
   }
 
   getNowValues(category) {
+    if (this.nowValues[category]) {
+      return this.nowValues[category];
+    }
+    const results = this.nowValues[category] = [];
     const now_index = this.getNowIndex(category);
-    const results = [];
     Object.entries(this.data).forEach(
       ([entry_id, row]) => {
         results.push(row[now_index] || 'none');
@@ -105,7 +119,6 @@ class SurveyData {
     if (this.deltas[category]) {
       return this.deltas[category];
     }
-
     const deltas = this.deltas[category] = [];
     const enter_index = this.getEnteredIndex(category);
     const now_index = this.getNowIndex(category);

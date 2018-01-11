@@ -50,6 +50,7 @@ class VerticalDeltas extends React.Component {
 	   }
 	 },
 	 series: [{
+        turboThreshold: 2000,
 	   name: this.state.series_name,
 	   data: this.state.data,
         color: this.state.color,
