@@ -43,12 +43,9 @@ class SurveyData {
         const now = row[now_index];
         if ((entered !== null && now != null) && entered !== now) {
           const is_better = now < entered;
-          const datum = {
-		  is_better,
-		  low: now < entered ? now : entered,
-		  high: now < entered ? entered : now,
-		  name: entry_id,
-          };
+          const low = is_better ? now : entered;
+          const high = is_better ? entered : now;
+          const datum = [entry_id.toString(), low, high];
           if (is_better) {
             got_better.push(datum);
           } else {
@@ -59,21 +56,15 @@ class SurveyData {
     );
     
     const sort_func = (a, b) => {
-      if (a.is_better && !b.is_better) {
-        return -1;
-	 } else if (!a.is_better && b.is_better) {
+      if (a[2] < b[2]) {
         return 1;
+      } else if (a[2] > b[2]) {
+        return -1;
       } else {
-        if (a.high < b.high) {
-          return 1;
-        } else if (a.high > b.high) {
+        if (a[1] < b[1]) {
           return -1;
-        } else {
-          if (a.low < b.low) {
-            return -1;
-          } else if (a.low > b.low) {
-            return 1;
-          }
+        } else if (a[1] > b[1]) {
+          return 1;
         }
       }
       return 0;

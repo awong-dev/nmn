@@ -43,7 +43,7 @@ class App extends React.Component {
         // IP collision, enter/exit.
         // small changes (0-1 delta), medium changes (2-3), large changes (4).
         <DeltaGraph surveyData={this.state.survey_data} key="delta-graph" />,
-        <FrequencyGraph surveyData={this.state.survey_data} key="frequency-graph" />,
+          //        <FrequencyGraph surveyData={this.state.survey_data} key="frequency-graph" />,
       );
 
       for (let category of ['Suicidal', 'Negative']) {

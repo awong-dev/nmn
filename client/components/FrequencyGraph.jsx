@@ -109,7 +109,6 @@ class FrequencyGraph extends React.Component {
     const lastElement = this.state.data[this.state.data.length - 1];
     const rightMostPoint = lastElement.center + lastElement.radius * 2 + kCirclePadding;
     const topMostRadius = Math.max(... this.state.data.map(d => d.radius));
-    console.log(topMostRadius);
     const xScale = d3.scaleLinear()
     .domain([- 2 * kCirclePadding, rightMostPoint + 4 * kCirclePadding])  // This is wrong.
       .range([0, this.state.width]);
