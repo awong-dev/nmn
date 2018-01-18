@@ -39,6 +39,7 @@ function anonymize_ip(ip) {
     ip_to_id[ip] = current_ip_id;
     current_ip_id = current_ip_id + 1;
   }
+  return ip_to_id[ip];
 }
 
 // Converts field data from strings to more suitable types.
@@ -110,7 +111,7 @@ function output_results(err, header, rows) {
       const header_value = header[i];
       if (HeadersForOutput.hasOwnProperty(header_value)) {
         new_row[results.header.indexOf(header_value)] =
-          r.data[HeadersForOutput[header_value]];
+          r[HeadersForOutput[header_value]];
       }
     }
     results.data[r[entryIdIndex]] = new_row;

@@ -27,5 +27,15 @@ $mdc-theme-secondary: #303f9f;
   background-color: LightGrey;
 }
 
+table.stats-table {
+  border-spacing: 0px;
+  border-collapse: collapse;
+}
+
+.stats-table tbody > tr > td {
+  border: 1px solid black;
+  padding: 0.2rem;
+}
+
 .graph-svg-component {
 }

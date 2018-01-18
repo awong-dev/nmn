@@ -47,6 +47,7 @@
     "firebase-tools": "^3.12.0",
     "highcharts": "^6.0.4",
     "immutability-helper": "^2.6.2",
+    "jstat": "^1.7.1",
     "material-components-web": "^0.27.0",
     "mocha": "^4.1.0",
     "node-sass": "^4.1.1",

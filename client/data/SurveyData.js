@@ -9,8 +9,36 @@ class SurveyData {
   constructor(survey_data) {
     this.headers = {};
     survey_data.header.map((value, index) => this.headers[value] = index);
-    this.data = survey_data.data;
+    this.data = {};
 
+    // Only keep the first entry from the same IP.
+    // Only keep entries with complete data.
+    const user_ip_index = this.headers['User IP']; 
+    const negative_now_index = this.getNowIndex('Negative');
+    const negative_entered_index = this.getEnteredIndex('Negative');
+    const suicidal_now_index = this.getNowIndex('Suicidal');
+    const suicidal_entered_index = this.getEnteredIndex('Suicidal');
+    const ips_seen = {};
+    Object.entries(survey_data.data).forEach(
+      ([entry_id, row]) => {
+        if (row[negative_entered_index] !== null &&
+            row[negative_now_index] !== null &&
+            row[suicidal_entered_index] !== null &&
+            row[suicidal_now_index] !== null) {
+          const ip = row[user_ip_index];
+          if (!(ip in ips_seen)) {
+            ips_seen[ip] = 1;
+            this.data[entry_id] = row;
+          }
+        }
+      });
+
+    // Cache metadata header indexes.
+    this.is_midaged_male_index = this.headers['male ages 36-64'];
+    this.is_mental_health_provider_index = this.headers['mental health provider'];
+    this.is_other_healthcare_provider_index = this.headers['other healthcare provider'];
+    this.entry_date_index = this.headers['Entry Date'];
+    
     // Memoization fields.
     this.deltas = {};
     this.correlations = {};
@@ -25,10 +53,10 @@ class SurveyData {
 
   getEntryMetadata(row) {
     return {
-      is_midaged_male: row[this.headers['male ages 36-64']],
-      is_mental_health_provider: row[this.headers['mental health provider']],
-      is_other_healthcare_provider: row[this.headers['other healthcare provider']],
-      entry_date: new Date(row[this.headers['Entry Date']]),
+      is_midaged_male: row[this.is_midaged_male_index],
+      is_mental_health_provider: row[this.is_mental_health_provider_index],
+      is_other_healthcare_provider: row[this.is_other_healthcare_provider_index],
+      entry_date: new Date(row[this.entry_date_index]),
     };
   }
 
@@ -84,15 +112,38 @@ class SurveyData {
     return results;
   }
 
-  getEnteredValues(category) {
-    if (this.enteredValues[category]) {
-      return this.enteredValues[category];
+  getValues(category, demographics, source_url) {
+    demographics = demographics || {
+      mhprov: true,
+      otherprov: true,
+      male36_64: true,
+      uncategorized: true
+    };
+    source_url = source_url || '';
+
+    const memoize_key = category + demographics.mhprov + demographics.otherprov + demographics.male36_64 + demographics.uncategorized + source_url;
+
+    if (this.enteredValues[memoize_key]) {
+      return this.enteredValues[memoize_key];
     }
-    const results = this.enteredValues[category] = [];
+    const results = this.enteredValues[memoize_key] = [];
     const enter_index = this.getEnteredIndex(category);
+    const now_index = this.getNowIndex(category);
+    const source_url_index = this.headers['Source Url'];
     Object.entries(this.data).forEach(
       ([entry_id, row]) => {
-        results.push(row[enter_index] || 'none');
+        const entry = this.getEntryMetadata(row);
+        const matches_demographics = (
+          (demographics.male36_64 && entry.is_midaged_male) ||
+          (demographics.mhprov && entry.is_mental_health_provider) ||
+          (demographics.otherprov && entry.is_other_healthcare_provider) ||
+          (demographics.uncategorized && !entry.is_midaged_male && !entry.is_mental_health_provider && !entry.is_other_healthcare_provider));
+        if (matches_demographics && row[source_url_index].startsWith(source_url)) {
+          entry.id = entry_id;
+          entry.now = row[now_index];
+          entry.enter = row[enter_index];
+          results.push(entry);
+        }
       }
     );
     return results;
