@@ -5,8 +5,10 @@ import LoginBar from './LoginBar'
 
 import CorrelationGraph from './CorrelationGraph'
 import DeltaGraph from './DeltaGraph'
+import DataControl from './DataControl'
 import DescriptiveStats from './DescriptiveStats'
-import EnterNowModes from './EnterNowModes'
+import EnterNowHistogram from './EnterNowHistogram'
+import PairedEnterNowHistogram from './PairedEnterNowHistogram'
 import FrequencyGraph from './FrequencyGraph'
 import VerticalDeltas from './VerticalDeltas'
 
@@ -15,8 +17,25 @@ import SurveyData from '../data/SurveyData'
 class App extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { user: null };
+    this.state = {
+      user: null,
+      data_control: {
+        category: 'Negative',
+        source_url: "",
+        demographic: {
+          mhprov: true,
+          otherprov: true,
+          male36_64: true,
+          uncategorized: true,
+        },
+      }
+    };
+
     this.survey_data_ref = firebase.storage().ref('/data/survey-data-2017-12-13.json');
+
+    this.handleCategoryChange = this.handleCategoryChange.bind(this);
+    this.handleDemographicChange = this.handleDemographicChange.bind(this);
+    this.handleSourceUrlChange = this.handleSourceUrlChange.bind(this);
   }
 
   componentDidMount() {
@@ -29,23 +48,61 @@ class App extends React.Component {
     });
   }
 
+  handleCategoryChange(event) {
+    this.setState({
+      data_control:
+        Object.assign({}, this.state.data_control,
+                      {category: event.target.value})});
+  }
+
+  handleSourceUrlChange(event) {
+    this.setState({
+      data_control:
+        Object.assign({}, this.state.data_control,
+                      {source_url: event.target.value})});
+  }
+
+  handleDemographicChange(event) {
+    this.setState({
+      data_control:
+        Object.assign({}, this.state.data_control,
+                      { demographic:
+                        Object.assign({}, this.state.data_control.demographic,
+                      { [event.target.name]: event.target.checked })
+                      })
+    });
+  }
 
   render() {
     const graphs = [];
     if (this.state.survey_data) {
+      const values = this.state.survey_data.getValues(this.state.data_control.category, this.state.data_control.demographic, this.state.data_control.source_url);
       graphs.push(
-        <DescriptiveStats surveyData={this.state.survey_data} key="descriptive-stats" />,
+        <DataControl
+          category={this.state.data_control.category}
+          onCategoryChange={this.handleCategoryChange}
+          demographic={this.state.data_control.demographic}
+          onDemographicChange={this.handleDemographicChange}
+          source_url={this.state.data_control.source_url}
+          onSourceUrlChange={this.handleSourceUrlChange}
+          key="data-control" />,
+        <DescriptiveStats values={values} key="descriptive-stats" />,
+        <EnterNowHistogram values={values} dataControl={this.state.data_control} key="enter-now-histogram" />,
+        <PairedEnterNowHistogram values={values} dataControl={this.state.data_control} key="paired-enter-now-histogram" />,
+          /*
         <VerticalDeltas gotBetter={true} surveyData={this.state.survey_data} category='Negative' key="vertical-negative-better" />,
         <VerticalDeltas gotBetter={true} surveyData={this.state.survey_data} category='Suicidal' key="vertical-suicidal-better" />,
         <VerticalDeltas gotBetter={false} surveyData={this.state.survey_data} category='Negative' key="vertical-negative-worse" />,
         <VerticalDeltas gotBetter={false} surveyData={this.state.survey_data} category='Suicidal' key="vertical-suicidal-worse" />,
+        */
         // Data holes.
         // IP collision, enter/exit.
         // small changes (0-1 delta), medium changes (2-3), large changes (4).
-        <DeltaGraph surveyData={this.state.survey_data} key="delta-graph" />,
+            //        <DeltaGraph surveyData={this.state.survey_data} key="delta-graph" />,
           //        <FrequencyGraph surveyData={this.state.survey_data} key="frequency-graph" />,
       );
 
+      /*
       for (let category of ['Suicidal', 'Negative']) {
         for (let x of [[false, false], [false, true], [true, false]]) {
           const is_mental_health_provider = x[0];
@@ -64,6 +121,7 @@ class App extends React.Component {
           );
         }
       }
+      */
     }
     return (
       <div className="mdc-layout-grid mdc-toolbar-fixed-adjust">
