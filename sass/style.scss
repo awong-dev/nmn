@@ -58,6 +58,5 @@ table.stats-table {
 }
 
 .nmn-test-main {
-  overflow: auto;
-  overscroll-behavior: contain;
+  overflow-y: scroll;
 }

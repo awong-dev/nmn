@@ -2,7 +2,9 @@
   "name": "nmn-test",
   "description": "playing with nmn site",
   "repository": "https://github.com/awong-dev/nmn.git",
-  "dependencies": {},
+  "dependencies": {
+    "@material/ripple": "^0.28.0"
+  },
   "scripts": {
     "deploy": "npm run webpack && firebase deploy",
     "firebase": "firebase",
@@ -19,7 +21,7 @@
   ],
   "private": true,
   "devDependencies": {
-    "@material/button": "^0.27.0",
+    "@material/button": "^0.28.0",
     "async": "https://registry.npmjs.org/async/-/async-2.5.0.tgz",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.21.0",
@@ -48,7 +50,7 @@
     "highcharts": "^6.0.4",
     "immutability-helper": "^2.6.2",
     "jstat": "^1.7.1",
-    "material-components-web": "^0.27.0",
+    "material-components-web": "^0.28.0",
     "mocha": "^4.1.0",
     "node-sass": "^4.1.1",
     "node-where": "^1.1.0",
