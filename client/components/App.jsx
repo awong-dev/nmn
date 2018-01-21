@@ -75,17 +75,11 @@ class App extends React.Component {
 
   render() {
     const graphs = [];
-    if (this.state.survey_data) {
+    if (this.state.survey_data === undefined) {
+      graphs.push(<div key="ruh-roh">Uh oh. Couldn't load data. Are you authorized?</div>);
+    } else {
       const values = this.state.survey_data.getValues(this.state.data_control.category, this.state.data_control.demographic, this.state.data_control.source_url);
       graphs.push(
-        <DataControl
-          category={this.state.data_control.category}
-          onCategoryChange={this.handleCategoryChange}
-          demographic={this.state.data_control.demographic}
-          onDemographicChange={this.handleDemographicChange}
-          source_url={this.state.data_control.source_url}
-          onSourceUrlChange={this.handleSourceUrlChange}
-          key="data-control" />,
         <DescriptiveStats values={values} key="descriptive-stats" />,
         <EnterNowHistogram values={values} dataControl={this.state.data_control} key="enter-now-histogram" />,
         <PairedEnterNowHistogram values={values} dataControl={this.state.data_control} key="paired-enter-now-histogram" />,
@@ -124,9 +118,20 @@ class App extends React.Component {
       */
     }
     return (
-      <div className="mdc-layout-grid mdc-toolbar-fixed-adjust">
+      <div className="mdc-toolbar-fixed-adjust">
       <LoginBar />
-      {graphs}
+      <div className="nmn-test-content">
+        <DataControl
+          category={this.state.data_control.category}
+          onCategoryChange={this.handleCategoryChange}
+          demographic={this.state.data_control.demographic}
+          onDemographicChange={this.handleDemographicChange}
+          source_url={this.state.data_control.source_url}
+          onSourceUrlChange={this.handleSourceUrlChange} />
+        <main className="nmn-test-main">
+          {graphs}
+        </main>
+      </div>
       </div>
     );
   }
