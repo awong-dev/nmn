@@ -75,8 +75,11 @@ class PairedEnterNowHistogram extends React.Component {
   }
 
   componentDidUpdate() {
-    this.chart.title.update({ text: getTitle(this.props.dataControl.category) });
-    this.chart.series[0].setData(this.data.enter_now_pairs, false);
+    clearTimeout(this.chartIsUpdating);
+    this.chartIsUpdating = setTimeout(() => {
+        this.chart.title.update({ text: getTitle(this.props.dataControl.category) });
+        this.chart.series[0].setData(this.data.enter_now_pairs, true);
+      }, 100);
   }
 
   render() {

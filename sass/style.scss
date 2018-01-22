@@ -42,21 +42,31 @@ table.stats-table {
 }
 
 .nmn-test-body {
-  display: flex;
-  flex-direction: column;
+//  display: flex;
   padding: 0;
   margin: 0;
   box-sizing: border-box;
   min-height: 100%;
 }
 
-.nmn-test-content {
+.nmn-test-flex-root {
   display: flex;
-  flex: 1 1 auto;
-  height: 100%;
+  flex-direction: column;
   box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+.nmn-test-flex-content {
+  display: flex;
+  height: 100vh;
+}
+
+.nmn-test-nav {
+  flex: 1 auto;
 }
 
 .nmn-test-main {
-  overflow-y: scroll;
+  flex: 2 auto;
+  overflow: scroll;
 }

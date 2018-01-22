@@ -118,20 +118,21 @@ class App extends React.Component {
       */
     }
     return (
-      <div className="mdc-toolbar-fixed-adjust">
-      <LoginBar />
-      <div className="nmn-test-content">
-        <DataControl
-          category={this.state.data_control.category}
-          onCategoryChange={this.handleCategoryChange}
-          demographic={this.state.data_control.demographic}
-          onDemographicChange={this.handleDemographicChange}
-          source_url={this.state.data_control.source_url}
-          onSourceUrlChange={this.handleSourceUrlChange} />
-        <main className="nmn-test-main">
-          {graphs}
-        </main>
-      </div>
+      <div className="mdc-toolbar-fixed-adjust nmn-test-flex-root">
+        <div className="nmn-test-flex-content">
+          <nav className="mdc-drawer mdc-permanent-drawer mdc-typography nmn-test-nav">
+            <DataControl
+              category={this.state.data_control.category}
+              onCategoryChange={this.handleCategoryChange}
+              demographic={this.state.data_control.demographic}
+              onDemographicChange={this.handleDemographicChange}
+              source_url={this.state.data_control.source_url}
+              onSourceUrlChange={this.handleSourceUrlChange} />
+          </nav>
+          <main className="nmn-test-main">
+            {graphs}
+          </main>
+        </div>
       </div>
     );
   }

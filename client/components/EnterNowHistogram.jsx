@@ -74,9 +74,12 @@ class EnterNowHistogram extends React.Component {
   }
 
   componentDidUpdate() {
-    this.chart.title.update({ text: getTitle(this.props.dataControl.category) });
-    this.chart.series[0].setData(this.data.enter, false);
-    this.chart.series[1].setData(this.data.enter, true);
+    clearTimeout(this.chartIsUpdating);
+    this.chartIsUpdating = setTimeout(() => {
+      this.chart.title.update({ text: getTitle(this.props.dataControl.category) });
+      this.chart.series[0].setData(this.data.enter, false);
+      this.chart.series[1].setData(this.data.now, true);
+    }, 100);
   }
 
   render() {
