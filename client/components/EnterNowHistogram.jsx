@@ -46,6 +46,7 @@ class EnterNowHistogram extends React.Component {
   }
 
   drawChart() {
+    const data = this.getData();
     this.chart = Highcharts.chart(this.state.id, {
 	 title: { text: getTitle(this.props.dataControl.category) },
 	 xAxis: {
@@ -64,11 +65,11 @@ class EnterNowHistogram extends React.Component {
 	 series: [{
 	   name: 'enter',
 	   type: 'column',
-	   data: this.data.enter,
+	   data: data.enter,
 	 },{
 	   name: 'now',
 	   type: 'column',
-	   data: this.data.now,
+	   data: data.now,
 	 }]
     });
   }
@@ -76,14 +77,14 @@ class EnterNowHistogram extends React.Component {
   componentDidUpdate() {
     clearTimeout(this.chartIsUpdating);
     this.chartIsUpdating = setTimeout(() => {
+      const data = this.getData();
       this.chart.title.update({ text: getTitle(this.props.dataControl.category) });
-      this.chart.series[0].setData(this.data.enter, false);
-      this.chart.series[1].setData(this.data.now, true);
+      this.chart.series[0].setData(data.enter, false);
+      this.chart.series[1].setData(data.now, true);
     }, 100);
   }
 
   render() {
-    this.data = this.getData();
     return (
       <ChartCard
         title={this.state.title}

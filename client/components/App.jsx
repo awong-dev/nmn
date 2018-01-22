@@ -80,9 +80,9 @@ class App extends React.Component {
     } else {
       const values = this.state.survey_data.getValues(this.state.data_control.category, this.state.data_control.demographic, this.state.data_control.source_url);
       graphs.push(
-        <DescriptiveStats values={values} key="descriptive-stats" />,
-        <EnterNowHistogram values={values} dataControl={this.state.data_control} key="enter-now-histogram" />,
         <PairedEnterNowHistogram values={values} dataControl={this.state.data_control} key="paired-enter-now-histogram" />,
+        <EnterNowHistogram values={values} dataControl={this.state.data_control} key="enter-now-histogram" />,
+        <DescriptiveStats values={values} key="descriptive-stats" />,
           /*
         <VerticalDeltas gotBetter={true} surveyData={this.state.survey_data} category='Negative' key="vertical-negative-better" />,
         <VerticalDeltas gotBetter={true} surveyData={this.state.survey_data} category='Suicidal' key="vertical-suicidal-better" />,
