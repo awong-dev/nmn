@@ -55,11 +55,12 @@ table.stats-table {
   box-sizing: border-box;
   padding: 0;
   margin: 0;
+  height: 100vh;
 }
 
 .nmn-test-flex-content {
   display: flex;
-  height: 100vh;
+  height: 100%;
 }
 
 .nmn-test-nav {

@@ -118,8 +118,9 @@ class App extends React.Component {
       */
     }
     return (
-      <div className="mdc-toolbar-fixed-adjust nmn-test-flex-root">
-        <div className="nmn-test-flex-content">
+      <div className="nmn-test-flex-root">
+        <LoginBar />
+        <div className="nmn-test-flex-content mdc-toolbar-fixed-adjust ">
           <nav className="mdc-drawer mdc-permanent-drawer mdc-typography nmn-test-nav">
             <DataControl
               category={this.state.data_control.category}

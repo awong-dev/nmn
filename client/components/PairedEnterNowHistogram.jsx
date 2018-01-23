@@ -4,7 +4,7 @@ import ChartCard from './ChartCard'
 import jStat from 'jstat';
 
 function getTitle(category) {
-  return `${category} Ratings Histogram`;
+  return `${category} Enter-Now Histogram`;
 }
 
 const xLabels = ['5', '4', '3', '2', '1'];
