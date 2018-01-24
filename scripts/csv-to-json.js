@@ -3,6 +3,9 @@ const csvParse = require('csv-parse');
 const fs = require('fs');
 const where = require('node-where');
 const url = require('url');
+const child_process = require('child_process');
+
+const kSurveyBecame8Min = new Date('2015-08-07 05:00:00 GMT').getTime();
 
 const IntegralFields = {
   'Entered-Negative': null,
@@ -52,12 +55,19 @@ function clean_fields(item, header) {
     } else if (BooleanFields.hasOwnProperty(header_value)) {
       item[x] = item[x] !== '';
     } else if (DateTimeFields.hasOwnProperty(header_value)) {
-      item[x] = (new Date(`${item[x]} PST`)).getTime();  // NMN database runs in PST.
+      item[x] = (new Date(`${item[x]} GMT`)).getTime();  // NMN database runs in GMT.
     }
 
     // Only keep the pathname. Drop query string for privacy. Drop host name for space.
     if (header_value === 'Source Url') {
       item[x] = url.parse(item[x]).pathname;
+    }
+
+    if (header_value === 'User Agent') {
+      // Sometimes the user agent is quoted. Remove that.
+      if (item[x][0] === '"') {
+        item[x] = item[x].slice(1, -1);
+      }
     }
   }
 }
@@ -69,6 +79,25 @@ function process_row(row, header, cb) {
   row[ipIndex] = anonymize_ip(ip);
 
   clean_fields(row, header);
+
+  const uaIndex = header.indexOf('User Agent');
+  const entryDateIndex = header.indexOf('Entry Date');
+  const entryDate = row[entryDateIndex];
+  const options = {
+    input: row[uaIndex]
+  };
+  const result = child_process.execSync('php is_mobile.php', options).toString();
+  const is_mobile = result.match(/.*,1\n/) !== null;
+  let survey_time = 1;
+  if (is_mobile === false) {
+    if (entryDate < kSurveyBecame8Min) {
+      survey_time = 3;
+    } else {
+      survey_time = 8;
+    }
+  }
+
+  row.push(is_mobile, survey_time);
   fill_in_geo(ip, row, cb, 3);
 }
 
@@ -89,6 +118,8 @@ function output_results(err, header, rows) {
     "Entry Date": null,
     "Source Url": null,
     "User IP": null,
+    "Is Mobile": null,
+    "Survey Time": null,
     'State': null,
     'Country': null
   };
@@ -147,7 +178,7 @@ parser.on('error', (err) => {
 // When we are done, test that the parsed output matched what expected
 parser.on('finish', () =>{
   const header = output[0];
-  header.push('State', 'Country');
+  header.push('Is Mobile', 'Survey Time', 'State', 'Country');
 
   const data_rows = output.slice(1);
   asyncLib.map(data_rows,
