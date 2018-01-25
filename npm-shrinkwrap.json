@@ -18390,6 +18390,12 @@
         }
       }
     },
+    "react-html-id": {
+      "version": "0.1.2",
+      "resolved": "https://registry.npmjs.org/react-html-id/-/react-html-id-0.1.2.tgz",
+      "integrity": "sha512-JZn24L2hbZRhpfHeuMue9dQcOvRQMlvvQTYyp7PjIv2WzPyYrN+tW3sTbSMZn5juMAqcA4dvJidjwMk9BNHFKg==",
+      "dev": true
+    },
     "react-measure": {
       "version": "2.0.2",
       "resolved": "https://registry.npmjs.org/react-measure/-/react-measure-2.0.2.tgz",

@@ -130,6 +130,7 @@ class SurveyData {
     const enter_index = this.getEnteredIndex(category);
     const now_index = this.getNowIndex(category);
     const source_url_index = this.headers['Source Url'];
+    const survey_time_index = this.headers['Survey Time'];
     Object.entries(this.data).forEach(
       ([entry_id, row]) => {
         const entry = this.getEntryMetadata(row);
@@ -142,6 +143,7 @@ class SurveyData {
           entry.id = entry_id;
           entry.now = row[now_index];
           entry.enter = row[enter_index];
+          entry.survey_time = row[survey_time_index];
           results.push(entry);
         }
       }

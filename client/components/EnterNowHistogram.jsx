@@ -1,6 +1,7 @@
 import React from 'react';
 import Highcharts from 'highcharts'
 import ChartCard from './ChartCard'
+import {enableUniqueIds} from 'react-html-id';
 import jStat from 'jstat';
 
 function getTitle(category) {
@@ -11,8 +12,9 @@ const xLabels = [1, 2, 3, 4, 5];
 class EnterNowHistogram extends React.Component {
   constructor(props) {
     super(props);
+    enableUniqueIds(this);
     this.state = {
-      id: 'enter-now-histogram',
+      id: this.nextUniqueId(),
       title: `Enter and Now Histograms`,
     };
 

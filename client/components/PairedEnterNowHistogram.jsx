@@ -1,6 +1,7 @@
 import React from 'react';
 import Highcharts from 'highcharts'
 import ChartCard from './ChartCard'
+import {enableUniqueIds} from 'react-html-id';
 import jStat from 'jstat';
 
 function getTitle(category) {
@@ -18,12 +19,31 @@ const xLabelsRld = (()=>{
   return array;
 })();
 
+function round(num) {
+  return Math.round(num*1000)/1000;
+}
+
+function getMean(bucket) {
+  let sum = 0;
+  let cnt = 0;
+  for (const val of bucket) {
+    const score = parseInt(xLabels[val[0]]);
+    sum += score * val[1];
+    cnt += val[1];
+  }
+  return round(sum/cnt);
+}
+
+
 class PairedEnterNowHistogram extends React.Component {
   constructor(props) {
     super(props);
+    enableUniqueIds(this);
+
     this.state = {
-      id: 'paired-enter-now-histogram',
-      title: `Histrogram of Now Ratings, bucketed by Enter Rating`, 
+      id: this.nextUniqueId(),
+      title: `Histrogram of Now Ratings, Grouped by Enter Rating`, 
+      remove_zero_change: false,
     };
 
     this.drawChart = this.drawChart.bind(this);
@@ -48,13 +68,19 @@ class PairedEnterNowHistogram extends React.Component {
   getData() {
     const values = this.props.values;
     return {
-      //      enter_now_pairs: this.countValues(this.props.values.map(d => `(${d.enter},${d.now})`)),
       now_buckets: {
         5: this.countValues(values.filter(d => d.now == 5).map(d => `${d.enter}`)),
         4: this.countValues(values.filter(d => d.now == 4).map(d => `${d.enter}`)),
         3: this.countValues(values.filter(d => d.now == 3).map(d => `${d.enter}`)),
         2: this.countValues(values.filter(d => d.now == 2).map(d => `${d.enter}`)),
         1: this.countValues(values.filter(d => d.now == 1).map(d => `${d.enter}`)),
+      },
+      enter_buckets: {
+        5: this.countValues(values.filter(d => d.enter == 5).map(d => `${d.now}`)),
+        4: this.countValues(values.filter(d => d.enter == 4).map(d => `${d.now}`)),
+        3: this.countValues(values.filter(d => d.enter == 3).map(d => `${d.now}`)),
+        2: this.countValues(values.filter(d => d.enter == 2).map(d => `${d.now}`)),
+        1: this.countValues(values.filter(d => d.enter == 1).map(d => `${d.now}`)),
       }
     };
   }
@@ -105,22 +131,34 @@ class PairedEnterNowHistogram extends React.Component {
   componentDidUpdate() {
     clearTimeout(this.chartIsUpdating);
     this.chartIsUpdating = setTimeout(() => {
-        const data = this.getData();
         this.chart.title.update({ text: getTitle(this.props.dataControl.category) });
-        this.chart.series[0].setData(data.now_buckets[5], false);
-        this.chart.series[1].setData(data.now_buckets[4], false);
-        this.chart.series[2].setData(data.now_buckets[3], false);
-        this.chart.series[3].setData(data.now_buckets[2], false);
-        this.chart.series[4].setData(data.now_buckets[1], true);
+        this.chart.series[0].setData(this.data.now_buckets[5], false);
+        this.chart.series[1].setData(this.data.now_buckets[4], false);
+        this.chart.series[2].setData(this.data.now_buckets[3], false);
+        this.chart.series[3].setData(this.data.now_buckets[2], false);
+        this.chart.series[4].setData(this.data.now_buckets[1], true);
       }, 100);
   }
 
   render() {
+    this.data = this.getData();
+    let summary = "";
+    if (this.data) {
+      summary = (
+        <section className="mdc-card__supporting-text detail-box">
+          <span className="details">avg_exit@5={getMean(this.data.enter_buckets[5])}</span>
+          <span className="details">avg_exit@4={getMean(this.data.enter_buckets[4])}</span>
+          <span className="details">avg_exit@3={getMean(this.data.enter_buckets[3])}</span>
+          <span className="details">avg_exit@2={getMean(this.data.enter_buckets[2])}</span>
+          <span className="details">avg_exit@1={getMean(this.data.enter_buckets[1])}</span>
+        </section>);
+    }
     return (
       <ChartCard
         title={this.state.title}
         onResize={(contentRect) => this.setState({width: contentRect.bounds.width})}>
         <div id={this.state.id} ref={(r) => this.chartRef = r} />
+        {summary}
       </ChartCard>
     );
   }
