@@ -52,7 +52,7 @@
     "jstat": "^1.7.1",
     "material-components-web": "^0.28.0",
     "mocha": "^4.1.0",
-    "node-sass": "^4.1.1",
+    "node-sass": "^7.0.0",
     "node-where": "^1.1.0",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
